@@ -1,7 +1,8 @@
 #define SDL_MAIN_HANDLED
 
-#include <iostream>
+#include "game.hpp"
 
 int main(int, char**) {
-    std::cout << "Hello, world!\n";
+  Game game = Game();
+  game.run();
 }
