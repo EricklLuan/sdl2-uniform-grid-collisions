@@ -10,12 +10,12 @@ struct Rect {
   SDL_Rect rect = {
     rand() % 128,
     rand() % 128,
-    (rand() % 40) + 10,
-    (rand() % 40) + 10
+    5,
+    5
   };
   bool isColliding = false;
   SDL_Color color = {0, 0, 0, 255};
-  Vector2 velocity = { (float)(rand() % 5), (float)(rand() % 5) };
+  Vector2 velocity = { (float)(rand() % 2), (float)(rand() % 2) };
 };
 
 class UniformGrid {

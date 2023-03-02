@@ -8,9 +8,9 @@ UniformGrid::UniformGrid(Vector2 viewportSize, int nCellSize): cellSize(nCellSiz
   int width = std::floor(viewportSize.x / cellSize) + 2;
   int height = std::floor(viewportSize.y / cellSize) + 2;
 
-  for (int y = -2; y < height; y++) {
+  for (int y = -2; y <= height + 1; y++) {
     std::vector<std::vector<Rect*> > row = {};
-    for (int x = -2; x < width; x++) {
+    for (int x = -2; x <= width + 1; x++) {
       row.push_back(std::vector<Rect*>{});
     }
     grid.push_back(row);
@@ -21,7 +21,6 @@ UniformGrid::~UniformGrid() {
   
 }
 
-// problema de locação linha 36
 void UniformGrid::addRect(Rect &rect) {
   int startX = std::floor((rect.rect.x) / (cellSize)) + 2;
   int endX = std::floor((rect.rect.x + rect.rect.w) / (cellSize)) + 2;
@@ -39,7 +38,6 @@ void UniformGrid::addRect(Rect &rect) {
   }
 }
 
-// problema de iteração linha 55
 void UniformGrid::removeRect(Rect &rect) {
   rect.isColliding = false;
   int startX = std::floor((rect.rect.x) / (cellSize)) + 2;
