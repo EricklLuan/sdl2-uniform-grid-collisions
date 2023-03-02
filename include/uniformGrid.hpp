@@ -1,38 +1,33 @@
 #pragma once
 
-#include <SDL2/SDL.h>
-#include <variant>
 #include <vector>
+#include <unordered_map>
 
 #include "vector2.hpp"
 
-struct Rect {
-  SDL_Rect rect = {
-    rand() % 128,
-    rand() % 128,
-    5,
-    5
-  };
-  bool isColliding = false;
-  SDL_Color color = {0, 0, 0, 255};
-  Vector2 velocity = { (float)(rand() % 2), (float)(rand() % 2) };
+struct Object {
+  Vector2 position;
+  Vector2 size;
+  int id;
 };
 
 class UniformGrid {
 private:
-  std::vector< std::vector<std::vector<Rect* > > > grid;
-  std::vector<Rect> rects;
-  int cellSize;
+  using cellID = uint32_t;
+  using objectID = uint32_t;
 
-  bool collide(Rect &a, Rect &b);
+  std::unordered_map<objectID, Object> mObjects;
+  std::unordered_multimap<objectID, cellID> mObjCell;
+  std::unordered_multimap<cellID, objectID> mCellObj;
+
+  Vector2 mCellSize;
+  Vector2 mViewportSize;
 public:
 
-  UniformGrid(Vector2 viewportSize, int nCellSize);
-  ~UniformGrid();
+  UniformGrid(Vector2 cellSize, Vector2 viewportSize);
 
-  void addRect(Rect &rect);
-  void removeRect(Rect &rect);
+  void add(Object &obj);
+  void remove(Object &obj);
 
-  std::vector<Rect*> getCollisions(Rect &rect);
-  void checkCollision(Rect &rect);
-};  
+  void update();
+};
