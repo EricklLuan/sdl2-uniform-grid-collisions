@@ -19,6 +19,22 @@ Game::~Game() {
 void Game::run() {
   if (!init) return;
 
+  UnifomGrid uniform_grid = UnifomGrid(10, window.vSize);
+
+  std::vector<Object> objs = {
+    Object({0, 0}, {20, 20}),
+    Object({0, 0}, {20, 20}),
+    Object({0, 0}, {20, 20}),
+    Object({0, 0}, {20, 20}),
+    Object({0, 0}, {20, 20}),
+  };
+
+  for (int i = 0; i < objs.size(); i++)
+  {
+    uniform_grid.add(objs[i]);
+  }
+  
+
   while (true) {
     Uint32 startTimer = SDL_GetTicks();
 
