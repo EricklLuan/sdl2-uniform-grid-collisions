@@ -22,17 +22,13 @@ void Game::run() {
   UnifomGrid uniform_grid = UnifomGrid(10, window.vSize);
 
   std::vector<Object> objs = {
-    Object({0, 0}, {20, 20}),
-    Object({0, 0}, {20, 20}),
-    Object({0, 0}, {20, 20}),
-    Object({0, 0}, {20, 20}),
-    Object({0, 0}, {20, 20}),
+    Object({(float)(rand() % (128 - 20)), (float)(rand() % (128 - 20))}, {20, 20}),
+    Object({(float)(rand() % (128 - 20)), (float)(rand() % (128 - 20))}, {20, 20}),
+    Object({(float)(rand() % (128 - 20)), (float)(rand() % (128 - 20))}, {20, 20}),
+    Object({(float)(rand() % (128 - 20)), (float)(rand() % (128 - 20))}, {20, 20}),
+    Object({(float)(rand() % (128 - 20)), (float)(rand() % (128 - 20))}, {20, 20}),
   };
 
-  for (int i = 0; i < objs.size(); i++)
-  {
-    uniform_grid.add(objs[i]);
-  }
   
 
   while (true) {
@@ -44,12 +40,35 @@ void Game::run() {
         return;
         break;
       case SDL_KEYDOWN:
+        if (e.key.repeat == 0) {
+          if (e.key.keysym.scancode == SDL_SCANCODE_D) objs[0].position.x += 1;
+          if (e.key.keysym.scancode == SDL_SCANCODE_A) objs[0].position.x -= 1;
+          if (e.key.keysym.scancode == SDL_SCANCODE_W) objs[0].position.y -= 1;
+          if (e.key.keysym.scancode == SDL_SCANCODE_S) objs[0].position.y += 1;
+        }
         break;
       }
     }
 
     window.clear();
    
+    for (int i = 0; i < objs.size(); i++) {
+      uniform_grid.remove(objs[i].getID());
+
+      SDL_Rect rect = {
+        (int)objs[i].position.x,
+        (int)objs[i].position.y,
+        (int)objs[i].size.x,
+        (int)objs[i].size.y
+      };
+
+      SDL_SetRenderDrawColor(window.getRenderer(), objs[i].color.r, objs[i].color.g, objs[i].color.b, objs[i].color.a);
+      SDL_RenderDrawRect(window.getRenderer(), &rect);
+
+      uniform_grid.add(objs[i]);
+    }
+    uniform_grid.checkCollision(objs[0].getID());
+
     window.flip();
 
     int frameTicks = SDL_GetTicks() - startTimer;
