@@ -8,13 +8,10 @@ UnifomGrid::UnifomGrid(int cell_size, Vector2 viewport_size): _cSize(cell_size),
 }
 
 void UnifomGrid::add(Object &obj) {
-  int startX = std::floor(obj.position.x/_cSize);
-  int endX   = std::floor((obj.position.x + obj.size.x)/_cSize);
-  int startY = std::floor(obj.position.y/_cSize);
-  int endY   = std::floor((obj.position.y + obj.size.y)/_cSize);
+  TargetCells target = _getTargetCels(obj.position, obj.size);
 
-  for (int y = startY; y <= endY; y++) {
-    for (int x = startX; x <= endX; x++) {
+  for (int y = target.startY; y <= target.endY; y++) {
+    for (int x = target.startX; x <= target.endX; x++) {
       int cellId = _getCellID(Vector2((float)x, (float(y))));
 
       std::vector<int> &result = _grid[cellId].objects_in_cell;
@@ -26,6 +23,7 @@ void UnifomGrid::add(Object &obj) {
     }
   }
 
+  _old_objects.insert(std::make_pair(obj.getID(), std::make_unique<Object>(obj.position, obj.size)));
   _objects[obj.getID()] = &obj;
 }
 
@@ -44,9 +42,20 @@ void UnifomGrid::remove(int id) {
   }
 
   _objCell.erase(id);
+  _old_objects.erase(id);
 }
 
 void UnifomGrid::update(int id) {
+  _objects[id]->color = {0,0,0,255};
+
+  if (_objects.find(id) != _objects.end()) {
+    TargetCells newO = _getTargetCels(_objects[id]->position, _objects[id]->size);
+    TargetCells oldO = _getTargetCels(_old_objects[id]->position, _old_objects[id]->size);
+    if (newO == oldO) {
+      return;
+    }
+  }
+
   remove(id);
   add(*_objects[id]);
 }
@@ -82,4 +91,15 @@ bool UnifomGrid::_aabb(int id1, int id2) {
            box1->position.y < box2->position.y + box2->size.y &&
            box1->size.y + box1->position.y > box2->position.y;
   
+}
+
+TargetCells UnifomGrid::_getTargetCels(Vector2 position, Vector2 size) {
+  int startX = std::floor(position.x/_cSize);
+  int endX   = std::floor((position.x + size.x)/_cSize);
+  int startY = std::floor(position.y/_cSize);
+  int endY   = std::floor((position.y + size.y)/_cSize);
+
+  return {
+    startX, endX, startY, endY
+  };
 }

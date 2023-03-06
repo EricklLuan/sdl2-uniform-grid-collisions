@@ -9,5 +9,7 @@ public:
   Vector2 operator+(Vector2 response);
   Vector2 operator-(Vector2 response);
   Vector2 operator*(Vector2 response);
-  Vector2 operator/(Vector2 response); 
+  Vector2 operator/(Vector2 response);
+  
+  void operator+=(Vector2 response);
 };

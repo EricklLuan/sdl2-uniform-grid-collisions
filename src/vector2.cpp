@@ -21,6 +21,11 @@ Vector2 Vector2::operator/(Vector2 response) {
   return result;
 }
 
+void Vector2::operator+=(Vector2 response) {
+  this->x += response.x;
+  this->y += response.y;
+}
+
 Vector2 Vector2::operator*(Vector2 response) {
   Vector2 result;
   result.x = this->x * response.x;

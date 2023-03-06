@@ -11,6 +11,8 @@ private:
 public:
   Vector2 position;
   Vector2 size;
+  Vector2 velocity;
+  
   SDL_Color color = {0, 0, 0, 255};
 
   Object(Vector2 nPosition, Vector2 nSize);
