@@ -19,17 +19,15 @@ Game::~Game() {
 void Game::run() {
   if (!init) return;
 
-  UnifomGrid uniform_grid = UnifomGrid(10, window.vSize);
+  UnifomGrid uniform_grid = UnifomGrid(15, window.vSize);
 
   std::vector<Object> objs = {
-    Object({(float)(rand() % (128 - 20)), (float)(rand() % (128 - 20))}, {20, 20}),
-    Object({(float)(rand() % (128 - 20)), (float)(rand() % (128 - 20))}, {20, 20}),
+    Object({0, 0}, {20, 20}),
+    Object({0, 0}, {20, 20}),
     Object({(float)(rand() % (128 - 20)), (float)(rand() % (128 - 20))}, {20, 20}),
     Object({(float)(rand() % (128 - 20)), (float)(rand() % (128 - 20))}, {20, 20}),
     Object({(float)(rand() % (128 - 20)), (float)(rand() % (128 - 20))}, {20, 20}),
   };
-
-  
 
   while (true) {
     Uint32 startTimer = SDL_GetTicks();
@@ -53,7 +51,6 @@ void Game::run() {
     window.clear();
    
     for (int i = 0; i < objs.size(); i++) {
-      uniform_grid.remove(objs[i].getID());
 
       SDL_Rect rect = {
         (int)objs[i].position.x,
@@ -64,10 +61,11 @@ void Game::run() {
 
       SDL_SetRenderDrawColor(window.getRenderer(), objs[i].color.r, objs[i].color.g, objs[i].color.b, objs[i].color.a);
       SDL_RenderDrawRect(window.getRenderer(), &rect);
-
+ 
+      uniform_grid.remove(objs[i].getID());
       uniform_grid.add(objs[i]);
+      uniform_grid.checkCollision(objs[i].getID());
     }
-    uniform_grid.checkCollision(objs[0].getID());
 
     window.flip();
 

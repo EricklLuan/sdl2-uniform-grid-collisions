@@ -11,7 +11,7 @@ struct Cell {
 
 class UnifomGrid {
 private:
-  std::vector<Cell> _grid;
+  std::unordered_map<int, Cell> _grid;
   std::unordered_map<int, Object*> _objects;
 
   std::unordered_multimap<int, int> _objCell;
